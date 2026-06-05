@@ -1,0 +1,80 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: opensuse-demo
+  namespace: myapp
+  annotations:
+    harvesterhci.io/vmRunStrategy: RerunOnFailure
+    harvesterhci.io/volumeClaimTemplates: >-
+      [{"metadata":{"name":"opensuse-demo-rootdisk","annotations":{"harvesterhci.io/imageId":"default/image-xxsqt"}},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"20Gi"}},"volumeMode":"Block","storageClassName":"longhorn-image-xxsqt"}}]
+
+spec:
+  runStrategy: RerunOnFailure
+
+  template:
+    metadata:
+      labels:
+        harvesterhci.io/vmName: opensuse-demo
+
+    spec:
+      hostname: opensuse-demo
+
+      domain:
+        cpu:
+          cores: 2
+
+        machine:
+          type: q35
+
+        memory:
+          guest: 4Gi
+
+        resources:
+          limits:
+            cpu: "2"
+            memory: 4Gi
+
+        devices:
+          disks:
+            - name: disk-0
+              bootOrder: 1
+              disk:
+                bus: virtio
+
+            - name: cloudinitdisk
+              disk:
+                bus: virtio
+
+          interfaces:
+            - name: default
+              bridge: {}
+              model: virtio
+
+      networks:
+        - name: default
+          multus:
+            networkName: default/net65
+
+      volumes:
+        - name: disk-0
+          persistentVolumeClaim:
+            claimName: opensuse-demo-rootdisk
+
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            userData: |
+              #cloud-config
+
+              users:
+                - default
+                - name: demo
+                  groups: wheel
+                  sudo: ALL=(ALL) NOPASSWD:ALL
+                  shell: /bin/bash
+                  lock_passwd: false
+                  plain_text_passwd: demo
+
+              ssh_pwauth: true
+
+      evictionStrategy: LiveMigrateIfPossible
+      terminationGracePeriodSeconds: 120
