@@ -1,7 +1,7 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: opensuse-demo
+  name: opensuse-demo-gitops
   namespace: myapp
   annotations:
     harvesterhci.io/vmRunStrategy: RerunOnFailure
@@ -14,10 +14,10 @@ spec:
   template:
     metadata:
       labels:
-        harvesterhci.io/vmName: opensuse-demo
+        harvesterhci.io/vmName: opensuse-demo-gitops
 
     spec:
-      hostname: opensuse-demo
+      hostname: opensuse-demo-gitops
 
       domain:
         cpu:
