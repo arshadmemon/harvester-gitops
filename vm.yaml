@@ -21,18 +21,18 @@ spec:
 
       domain:
         cpu:
-          cores: 2
+          cores: 4
 
         machine:
           type: q35
 
         memory:
-          guest: 4Gi
+          guest: 8Gi
 
         resources:
           limits:
-            cpu: "4"
-            memory: 8Gi
+            cpu: "2"
+            memory: 4Gi
 
         devices:
           disks:
