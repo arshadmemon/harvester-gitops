@@ -67,12 +67,12 @@ spec:
 
               users:
                 - default
-                - name: demo
+                - name: arme
                   groups: wheel
                   sudo: ALL=(ALL) NOPASSWD:ALL
                   shell: /bin/bash
                   lock_passwd: false
-                  plain_text_passwd: demo
+                  plain_text_passwd: arme123
 
               ssh_pwauth: true
 
