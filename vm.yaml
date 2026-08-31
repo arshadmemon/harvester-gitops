@@ -78,3 +78,7 @@ spec:
 
       evictionStrategy: LiveMigrateIfPossible
       terminationGracePeriodSeconds: 120
+      runcmd:
+  - zypper refresh
+  - zypper install -y nginx
+  - systemctl enable --now nginx
